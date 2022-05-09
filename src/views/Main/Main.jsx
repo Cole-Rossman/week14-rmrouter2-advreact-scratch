@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import mainStyle from './Main.css';
 import { useHistory, useLocation } from 'react-router-dom';
 import CharacterCard from '../../components/CharacterCard/CharacterCard';
+import CharacterFilter from '../../components/CharacterFilter/CharacterFilter';
+
 
 
 export default function Main() {
@@ -11,6 +13,11 @@ export default function Main() {
 
   const history = useHistory();
   const location = useLocation();
+  const status = new URLSearchParams(location.search).get('status') ?? 'all';
+
+  const handleStatusChange = (event) => {
+    history.push(`/?status=${event.target.value}`);
+  };
 
   useEffect(() => {
   try {
@@ -36,8 +43,9 @@ export default function Main() {
     <div className={mainStyle.main}>
         {error && <p>{error}</p>}
         <h1>Rick and Morty Character List:</h1>
+        <CharacterFilter statusValue={status} onStatusChange={handleStatusChange} />
         <ul className={mainStyle.list}>
-            {/* always check for whether to use implicit of explicit return */}
+            {/* always check for whether to use implicit or explicit return */}
             {characters.map((character) => {
                return <CharacterCard key={character.id} {...character} />
             })}
