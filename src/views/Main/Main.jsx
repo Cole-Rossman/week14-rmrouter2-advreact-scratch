@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import mainStyle from './Main.css';
 import { useHistory, useLocation } from 'react-router-dom';
+import CharacterCard from '../../components/CharacterCard/CharacterCard';
 
 
 export default function Main() {
@@ -29,8 +30,18 @@ export default function Main() {
   } catch (e) {
       setError(e.message);
   }
-  }, []);
+  }, [location.search]);
   return (
-    <div>Main</div>
+    loading ? <h1>Loading...</h1> :
+    <div className={mainStyle.main}>
+        {error && <p>{error}</p>}
+        <h1>Rick and Morty Character List:</h1>
+        <ul className={mainStyle.list}>
+            {/* always check for whether to use implicit of explicit return */}
+            {characters.map((character) => {
+               return <CharacterCard key={character.id} {...character} />
+            })}
+        </ul>
+    </div>
   )
 }
